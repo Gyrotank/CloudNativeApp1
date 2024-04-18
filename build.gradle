@@ -25,6 +25,8 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.701'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.701'
     compileOnly "org.projectlombok:lombok"
     developmentOnly "org.springframework.boot:spring-boot-devtools"
     annotationProcessor "org.projectlombok:lombok"

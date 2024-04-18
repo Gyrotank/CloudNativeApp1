@@ -1,9 +1,8 @@
 package com.glomozda.cloudnativeapp1.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.glomozda.cloudnativeapp1.domain.MockEntity;
+import com.glomozda.cloudnativeapp1.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,13 @@ import java.io.IOException;
 @RestController
 @RequestMapping(path="/image")
 public class ImageController {
+    protected final ImageService imageService;
+
+    @Autowired
+    public ImageController(ImageService imageService) {
+        this.imageService = imageService;
+    }
+
     @Value("${environment.s3-bucket-name}")
     private String s3BucketName;
 
@@ -30,13 +36,14 @@ public class ImageController {
         log.info("File Content Type: " + file.getContentType());
         log.info("File Content Size: " + bytes.length);
 
-        return (new ResponseEntity<>("Successful", null, HttpStatus.OK));
+        String uploadedFileId = imageService.uploadImage(file);
+
+        return (new ResponseEntity<>(uploadedFileId, null, HttpStatus.OK));
     }
 
     @GetMapping("/{id}")
-    public String getImageById(@PathVariable String id) throws JsonProcessingException {
-        MockEntity mockEntity = new MockEntity(Long.valueOf(id), "Mock One");
-        return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(mockEntity);
+    public byte[] getImageById(@PathVariable String id) throws IOException {
+        return imageService.getImageById(id);
     }
 
 }

@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class MockEntity {
-    Long id;
+public class ImageDto {
+    String id;
 
     String name;
 }
