@@ -36,8 +36,7 @@ public class ImageController {
         log.info("File Content Type: " + file.getContentType());
         log.info("File Content Size: " + bytes.length);
 
-//        String uploadedFileId = imageService.uploadImage(file);
-        String uploadedFileId = "Successful";
+        String uploadedFileId = imageService.uploadImage(file);
 
         return (new ResponseEntity<>(uploadedFileId, null, HttpStatus.OK));
     }
@@ -46,5 +45,4 @@ public class ImageController {
     public byte[] getImageById(@PathVariable String id) throws IOException {
         return imageService.getImageById(id);
     }
-
 }
