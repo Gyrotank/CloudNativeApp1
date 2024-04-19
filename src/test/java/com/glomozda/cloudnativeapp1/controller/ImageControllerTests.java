@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@Tags({@Tag("ControllerTest"), @Tag("AnonymousControllerTest"), @Tag("ImageControllerTest")})
+@Tags({@Tag("ControllerTest"), @Tag("ImageControllerTest")})
 @AutoConfigureMockMvc
 class ImageControllerTests {
     @Autowired

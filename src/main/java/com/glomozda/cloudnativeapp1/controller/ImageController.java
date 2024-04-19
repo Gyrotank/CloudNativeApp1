@@ -3,7 +3,6 @@ package com.glomozda.cloudnativeapp1.controller;
 import com.glomozda.cloudnativeapp1.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +20,6 @@ public class ImageController {
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
-
-    @Value("${environment.s3-bucket-name}")
-    private String s3BucketName;
-
-    @Value("${environment.dynamodb-table-name}")
-    private String dynamoDbTableName;
 
     @PostMapping("")
     public ResponseEntity<String> postImage(@RequestParam("file") MultipartFile file) throws IOException {
