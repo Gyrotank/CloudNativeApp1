@@ -20,12 +20,12 @@ public class Clients {
     private Clients() {
         dynamoDbClient = AmazonDynamoDBClientBuilder.standard()
                 .withCredentials(new DefaultAWSCredentialsProviderChain())
-                .withRegion(Regions.EU_NORTH_1)
+                .withRegion(Regions.EU_WEST_1)
                 .build();
 
         s3Client = AmazonS3ClientBuilder.standard()
                 .withCredentials(new DefaultAWSCredentialsProviderChain())
-                .withRegion(Regions.EU_NORTH_1)
+                .withRegion(Regions.EU_WEST_1)
                 .build();
     }
 
