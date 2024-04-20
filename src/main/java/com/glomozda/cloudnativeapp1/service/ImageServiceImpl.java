@@ -21,13 +21,14 @@ public class ImageServiceImpl implements ImageService {
     public String uploadImage(MultipartFile image) throws IOException {
         String id = UUID.randomUUID().toString();
         Clients.getInstance().getS3Client()
-                .putObject(s3BucketName, id + "/" + image.getOriginalFilename(),
+                .putObject(s3BucketName, id,
                         new ByteArrayInputStream(image.getBytes()), null);
         return id;
     }
 
     @Override
     public byte[] getImageById(String id) throws IOException {
-        return Clients.getInstance().getS3Client().getObject(s3BucketName,id).getObjectContent().readAllBytes();
+        return Clients.getInstance().getS3Client()
+                .getObject(s3BucketName, id).getObjectContent().readAllBytes();
     }
 }
