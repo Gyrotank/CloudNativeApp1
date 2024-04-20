@@ -3,8 +3,6 @@ package com.glomozda.cloudnativeapp1.service;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
-import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.glomozda.cloudnativeapp1.client.Clients;
@@ -39,22 +37,17 @@ public class ImageServiceImpl implements ImageService {
     public String getImagesDataByLabel(String label) {
         DynamoDB dynamoDB = new DynamoDB(Clients.getInstance().getDynamoDbClient());
         Table table = dynamoDB.getTable(dynamoDbTableName);
-        QuerySpec querySpec = new QuerySpec()
-                .withKeyConditionExpression("#pk = :pkValue")
-                .withNameMap(Map.of("#pk", "LabelValue"))
-                .withValueMap(new ValueMap().withString(":pkValue", label));
+        Iterator<Item> itemIterator = table.query("LabelValue", label).iterator();
 
-        Iterator<Item> itemIterator = table.query(querySpec).iterator();
-
-        List<Item> items = new ArrayList<>();
+        List<Map<String, Object>> items = new ArrayList<>();
         while (itemIterator.hasNext()) {
-            items.add(itemIterator.next());
+            items.add(itemIterator.next().asMap());
         }
 
         String result = "[]";
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            result = objectMapper.writeValueAsString(items);
+            result = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(items);
         } catch (JacksonException e) {
             log.error(e.getOriginalMessage());
         }
