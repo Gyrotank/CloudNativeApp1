@@ -28,6 +28,6 @@ class HomeControllerTests {
                         .contentType(MediaType.ALL)
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Health Check - Passed"));
+                .andExpect(content().string("Health Check Passed"));
     }
 }

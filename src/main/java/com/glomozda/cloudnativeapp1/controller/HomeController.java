@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.*;
 public class HomeController {
     @GetMapping("")
     public ResponseEntity<String> healthcheck() {
-        return (new ResponseEntity<>("Health Check - Passed", null, HttpStatus.OK));
+        return (new ResponseEntity<>("Health Check Passed", null, HttpStatus.OK));
     }
 }
