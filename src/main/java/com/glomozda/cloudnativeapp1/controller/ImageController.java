@@ -34,8 +34,8 @@ public class ImageController {
         return (new ResponseEntity<>(uploadedFileId, null, HttpStatus.OK));
     }
 
-    @GetMapping("/{id}")
-    public byte[] getImageById(@PathVariable String id) throws IOException {
-        return imageService.getImageById(id);
+    @GetMapping("/{label}")
+    public ResponseEntity<String> getImagesListByLabel(@PathVariable String label) {
+        return (new ResponseEntity<>(imageService.getImagesDataByLabel(label), null, HttpStatus.OK));
     }
 }

@@ -28,7 +28,7 @@ class ImageControllerTests {
     @Test
     void testGetImageById_OK() throws Exception {
         //Act and Assert
-        mockMvc.perform(get("/image/1")
+        mockMvc.perform(get("/image/Blue")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .with(csrf()))
                 .andExpect(status().isOk());

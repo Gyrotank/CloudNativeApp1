@@ -9,5 +9,5 @@ import java.io.IOException;
 public interface ImageService {
     String uploadImage(MultipartFile image) throws IOException;
 
-    byte[] getImageById(String id) throws IOException;
+    String getImagesDataByLabel(String label);
 }
