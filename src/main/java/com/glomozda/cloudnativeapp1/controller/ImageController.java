@@ -6,16 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -36,9 +34,13 @@ public class ImageController {
         log.info("File Content Type: " + imageFile.getContentType());
         log.info("File Content Size: " + bytes.length);
 
-        String uploadedFileId = imageService.uploadImage(imageFile);
-
-        return (new ResponseEntity<>(uploadedFileId, null, HttpStatus.OK));
+        String id = UUID.randomUUID() + "-" + imageFile.getOriginalFilename();
+        HttpStatusCode responseCode = imageService.uploadImage(id, imageFile);
+        if (responseCode.is2xxSuccessful()) {
+            return (new ResponseEntity<>(id, null, responseCode));
+        } else {
+            return (new ResponseEntity<>("ERROR!", null, responseCode));
+        }
     }
 
     @GetMapping("/{label}")

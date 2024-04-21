@@ -1,5 +1,7 @@
 package com.glomozda.cloudnativeapp1.service;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
@@ -9,6 +11,8 @@ import com.glomozda.cloudnativeapp1.client.Clients;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,12 +37,18 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String uploadImage(MultipartFile imageFile) throws IOException {
-        String id = UUID.randomUUID() + "-" + imageFile.getOriginalFilename();
-        clients.getInstance().getS3Client()
-                .putObject(s3BucketName, id,
-                        new ByteArrayInputStream(imageFile.getBytes()), null);
-        return id;
+    public HttpStatusCode uploadImage(String id, MultipartFile imageFile) throws IOException {
+        try {
+            clients.getInstance().getS3Client()
+                    .putObject(s3BucketName, id,
+                            new ByteArrayInputStream(imageFile.getBytes()), null);
+            return HttpStatus.OK;
+        } catch (AmazonServiceException ase) {
+            return HttpStatus.SERVICE_UNAVAILABLE;
+        }
+        catch (AmazonClientException ace) {
+            return HttpStatus.BAD_REQUEST;
+        }
     }
 
     @Override
