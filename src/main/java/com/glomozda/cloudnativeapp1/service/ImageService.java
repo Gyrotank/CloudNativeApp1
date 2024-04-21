@@ -7,7 +7,7 @@ import java.io.IOException;
 
 @Service
 public interface ImageService {
-    String uploadImage(MultipartFile image) throws IOException;
+    String uploadImage(MultipartFile imageFile) throws IOException;
 
     String getImagesDataByLabel(String label);
 }

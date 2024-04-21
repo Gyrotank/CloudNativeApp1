@@ -33,11 +33,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String uploadImage(MultipartFile image) throws IOException {
-        String id = UUID.randomUUID().toString();
+    public String uploadImage(MultipartFile imageFile) throws IOException {
+        String id = UUID.randomUUID() + "-" + imageFile.getOriginalFilename();
         clients.getInstance().getS3Client()
                 .putObject(s3BucketName, id,
-                        new ByteArrayInputStream(image.getBytes()), null);
+                        new ByteArrayInputStream(imageFile.getBytes()), null);
         return id;
     }
 

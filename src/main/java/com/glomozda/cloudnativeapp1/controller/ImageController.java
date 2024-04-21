@@ -1,14 +1,21 @@
 package com.glomozda.cloudnativeapp1.controller;
 
+import com.amazonaws.services.s3.Headers;
 import com.glomozda.cloudnativeapp1.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -22,20 +29,25 @@ public class ImageController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> postImage(@RequestParam("file") MultipartFile file) throws IOException {
-        byte[] bytes = file.getBytes();
+    public ResponseEntity<String> postImage(@RequestParam("file") MultipartFile imageFile) throws IOException {
+        byte[] bytes = imageFile.getBytes();
 
-        log.info("File Name: " + file.getOriginalFilename());
-        log.info("File Content Type: " + file.getContentType());
+        log.info("File Name: " + imageFile.getOriginalFilename());
+        log.info("File Content Type: " + imageFile.getContentType());
         log.info("File Content Size: " + bytes.length);
 
-        String uploadedFileId = imageService.uploadImage(file);
+        String uploadedFileId = imageService.uploadImage(imageFile);
 
         return (new ResponseEntity<>(uploadedFileId, null, HttpStatus.OK));
     }
 
     @GetMapping("/{label}")
     public ResponseEntity<String> getImagesListByLabel(@PathVariable String label) {
-        return (new ResponseEntity<>(imageService.getImagesDataByLabel(label), null, HttpStatus.OK));
+        Map<String, List<String>> headers = new HashMap<>();
+        headers.put(Headers.CONTENT_TYPE, Collections.singletonList(ContentType.APPLICATION_JSON.getMimeType()));
+        return (new ResponseEntity<>(
+                    imageService.getImagesDataByLabel(label),
+                    new LinkedMultiValueMap<>(headers),
+                    HttpStatus.OK));
     }
 }
