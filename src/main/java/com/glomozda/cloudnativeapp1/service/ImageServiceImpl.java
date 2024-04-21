@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.glomozda.cloudnativeapp1.client.Clients;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,10 +25,17 @@ public class ImageServiceImpl implements ImageService {
     @Value("${environment.dynamodb-table-name}")
     private String dynamoDbTableName;
 
+    private final Clients clients;
+
+    @Autowired
+    public ImageServiceImpl(Clients clients) {
+        this.clients = clients;
+    }
+
     @Override
     public String uploadImage(MultipartFile image) throws IOException {
         String id = UUID.randomUUID().toString();
-        Clients.getInstance().getS3Client()
+        clients.getInstance().getS3Client()
                 .putObject(s3BucketName, id,
                         new ByteArrayInputStream(image.getBytes()), null);
         return id;
@@ -35,7 +43,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String getImagesDataByLabel(String label) {
-        DynamoDB dynamoDB = new DynamoDB(Clients.getInstance().getDynamoDbClient());
+        DynamoDB dynamoDB = new DynamoDB(clients.getInstance().getDynamoDbClient());
         Table table = dynamoDB.getTable(dynamoDbTableName);
         Iterator<Item> itemIterator = table.query("LabelValue", label).iterator();
 
