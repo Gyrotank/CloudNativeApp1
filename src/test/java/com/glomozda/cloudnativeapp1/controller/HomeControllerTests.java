@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@Tags({@Tag("ControllerTest"), @Tag("HomeControllerTest")})
+@Tags({@Tag("IntegrationTest"), @Tag("ControllerTest"), @Tag("HomeControllerTest")})
 @AutoConfigureMockMvc
 class HomeControllerTests {
     @Autowired

@@ -35,7 +35,7 @@ public class ImageController {
         log.info("File Content Size: " + bytes.length);
 
         String id = UUID.randomUUID() + "-" + imageFile.getOriginalFilename();
-        HttpStatusCode responseCode = imageService.uploadImage(id, imageFile);
+        HttpStatusCode responseCode = imageService.uploadImage(id, bytes);
         if (responseCode.is2xxSuccessful()) {
             return (new ResponseEntity<>(id, null, responseCode));
         } else {
